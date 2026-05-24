@@ -3,1092 +3,274 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DevBox - 鍏嶈垂鍦ㄧ嚎寮€鍙戣€呭伐鍏风 | JSON鏍煎紡鍖栥€佹鍒欐祴璇曘€佷簩缁寸爜鐢熸垚</title>
-<meta name="description" content="DevBox 鍏嶈垂鍦ㄧ嚎寮€鍙戣€呭伐鍏风锛屾彁渚?JSON 鏍煎紡鍖栥€佹鍒欐祴璇曘€佹枃鏈姣斻€佷簩缁寸爜鐢熸垚銆丅ase64 缂栬В鐮併€佹椂闂存埑杞崲銆侀鑹茶浆鎹€乁RL 缂栬В鐮併€佸搱甯岃绠椼€乁UID 鐢熸垚銆佸瘑鐮佺敓鎴愮瓑 11+ 娆惧疄鐢ㄥ伐鍏凤紝鏁版嵁涓嶄笂浼狅紝鍗冲紑鍗崇敤銆?>
+<title>DevBox - 免费在线开发者工具箱</title>
+<meta name="description" content="13款免费在线开发工具，数据不上传，即开即用">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="DevBox - 免费在线开发者工具箱">
+<meta property="og:description" content="13款免费在线开发者工具">
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-:root {
-  --bg: #0f172a; --card: #1e293b; --border: #334155;
-  --text: #e2e8f0; --muted: #94a3b8; --primary: #6366f1;
-  --primary-hover: #818cf8; --success: #22c55e; --error: #ef4444;
-  --radius: 12px; --transition: 0.2s ease;
-}
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6;
-}
-.container { max-width: 960px; margin: 0 auto; padding: 24px 20px; }
-
-/* Header */
-.header { text-align: center; padding: 40px 0 32px; }
-.header h1 { font-size: 2.4rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.header p { color: var(--muted); margin-top: 8px; font-size: 1.05rem; }
-
-/* Tabs */
-.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; justify-content: center; }
-.tab {
-  padding: 10px 20px; border-radius: 999px; border: 1px solid var(--border);
-  background: var(--card); color: var(--muted); cursor: pointer;
-  font-size: 0.92rem; font-weight: 500; transition: var(--transition);
-  display: flex; align-items: center; gap: 6px; user-select: none;
-}
-.tab:hover { border-color: var(--primary); color: var(--text); }
-.tab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
-.tab svg { width: 18px; height: 18px; flex-shrink: 0; }
-
-/* Tool Panel */
-.tool-panel { display: none; }
-.tool-panel.active { display: block; }
-.card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 24px; margin-bottom: 16px;
-}
-.card h2 { font-size: 1.25rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-
-/* Common elements */
-textarea, input[type="text"], input[type="number"] {
-  width: 100%; padding: 12px 16px; border-radius: 8px;
-  border: 1px solid var(--border); background: var(--bg); color: var(--text);
-  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-  font-size: 0.9rem; resize: vertical; transition: var(--transition);
-}
-textarea:focus, input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
-textarea { min-height: 180px; }
-
-.btn {
-  padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer;
-  font-size: 0.9rem; font-weight: 600; transition: var(--transition);
-  display: inline-flex; align-items: center; gap: 6px;
-}
-.btn-primary { background: var(--primary); color: #fff; }
-.btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
-.btn-secondary { background: var(--border); color: var(--text); }
-.btn-secondary:hover { background: #475569; }
-.btn-success { background: var(--success); color: #fff; }
-.btn-success:hover { opacity: 0.9; }
-.btn-sm { padding: 6px 14px; font-size: 0.82rem; border-radius: 6px; }
-.btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-.row { display: flex; gap: 16px; }
-.col { flex: 1; min-width: 0; }
-
-/* Info bar */
-.info-bar {
-  display: flex; align-items: center; gap: 8px; padding: 8px 14px;
-  border-radius: 8px; font-size: 0.85rem; margin-top: 10px;
-}
-.info-bar.success { background: rgba(34,197,94,0.1); color: var(--success); border: 1px solid rgba(34,197,94,0.2); }
-.info-bar.error { background: rgba(239,68,68,0.1); color: var(--error); border: 1px solid rgba(239,68,68,0.2); }
-
-/* QR Code */
-.qr-container { text-align: center; }
-#qrcode-canvas { margin: 16px auto; display: block; max-width: 100%; border-radius: 8px; background: #fff; padding: 12px; }
-
-/* Diff */
-.diff-pane { overflow-x: auto; }
-.diff-added { background: rgba(34,197,94,0.15); color: #4ade80; }
-.diff-removed { background: rgba(239,68,68,0.15); color: #f87171; }
-.diff-line { padding: 2px 8px; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.85rem; white-space: pre; border-radius: 2px; }
-
-/* Color preview */
-.color-preview { width: 60px; height: 60px; border-radius: 12px; border: 2px solid var(--border); flex-shrink: 0; }
-
-/* Footer */
-.footer { text-align: center; padding: 40px 0 24px; color: var(--muted); font-size: 0.85rem; }
-.footer a { color: var(--primary); text-decoration: none; }
-
-/* Toast */
-.toast {
-  position: fixed; bottom: 24px; right: 24px; padding: 12px 20px;
-  border-radius: 10px; background: var(--success); color: #fff;
-  font-weight: 600; font-size: 0.9rem; opacity: 0; pointer-events: none;
-  transition: opacity 0.3s; z-index: 1000;
-}
-.toast.show { opacity: 1; }
-
-@media (max-width: 640px) {
-  .row { flex-direction: column; }
-  .header h1 { font-size: 1.7rem; }
-  .tab { padding: 8px 14px; font-size: 0.82rem; }
-  .card { padding: 16px; }
-}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f172a;--card:#1e293b;--border:#334155;--text:#e2e8f0;--muted:#94a3b8;--primary:#6366f1;--primary-hover:#818cf8;--success:#22c55e;--error:#ef4444;--radius:12px}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.container{max-width:960px;margin:0 auto;padding:24px 20px}
+.header{text-align:center;padding:40px 0 32px}
+.header h1{font-size:2.4rem;font-weight:800;background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header p{color:var(--muted);margin-top:8px;font-size:1.05rem}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;justify-content:center}
+.tab{padding:10px 20px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;font-size:.92rem;font-weight:500;transition:.2s;display:flex;align-items:center;gap:6px;user-select:none}
+.tab:hover{border-color:var(--primary);color:var(--text)}
+.tab.active{background:var(--primary);border-color:var(--primary);color:#fff}
+.tool-panel{display:none}
+.tool-panel.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px}
+.card h2{font-size:1.25rem;margin-bottom:16px}
+textarea,input[type=text],input[type=number],select{width:100%;padding:12px 16px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:"JetBrains Mono","Fira Code",Consolas,monospace;font-size:.9rem;resize:vertical;transition:.2s}
+textarea:focus,input:focus,select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
+textarea{min-height:180px}
+.btn{padding:10px 24px;border-radius:8px;border:none;cursor:pointer;font-size:.9rem;font-weight:600;transition:.2s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-hover)}
+.btn-secondary{background:var(--border);color:var(--text)}
+.btn-secondary:hover{background:#475569}
+.btn-sm{padding:6px 14px;font-size:.82rem;border-radius:6px}
+.btn-group{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.row{display:flex;gap:16px}
+.col{flex:1;min-width:0}
+.info-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:8px;font-size:.85rem;margin-top:10px}
+.info-bar.success{background:rgba(34,197,94,.1);color:var(--success);border:1px solid rgba(34,197,94,.2)}
+.info-bar.error{background:rgba(239,68,68,.1);color:var(--error);border:1px solid rgba(239,68,68,.2)}
+.qr-container{text-align:center}
+#qrcode-canvas{margin:16px auto;display:block;max-width:100%;border-radius:8px;background:#fff;padding:12px}
+.diff-pane{overflow-x:auto}
+.diff-added{background:rgba(34,197,94,.15);color:#4ade80}
+.diff-removed{background:rgba(239,68,68,.15);color:#f87171}
+.diff-line{padding:2px 8px;font-family:monospace;font-size:.85rem;white-space:pre;border-radius:2px}
+.color-preview{width:60px;height:60px;border-radius:12px;border:2px solid var(--border);flex-shrink:0}
+.footer{text-align:center;padding:40px 0 24px;color:var(--muted);font-size:.85rem}
+.toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;background:var(--success);color:#fff;font-weight:600;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:1000}
+.toast.show{opacity:1}
+@media(max-width:640px){.row{flex-direction:column}.header h1{font-size:1.7rem}.tab{padding:8px 14px;font-size:.82rem}.card{padding:16px}}
 </style>
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://devbox.tools">
-<meta property="og:title" content="DevBox - 鍏嶈垂鍦ㄧ嚎寮€鍙戣€呭伐鍏风 | JSON鏍煎紡鍖栥€佹鍒欐祴璇曘€佷簩缁寸爜鐢熸垚銆佸瘑鐮佺敓鎴?>
-<meta property="og:description" content="11娆惧厤璐瑰湪绾垮紑鍙戣€呭伐鍏凤紝鏁版嵁涓嶄笂浼狅紝鍗冲紑鍗崇敤銆侸SON鏍煎紡鍖栥€佹枃鏈姣斻€佷簩缁寸爜鐢熸垚銆丅ase64缂栬В鐮併€佹椂闂存埑杞崲銆侀鑹茶浆鎹€乁RL缂栬В鐮併€佸搱甯岃绠椼€乁UID鐢熸垚銆佹鍒欐祴璇曘€佸瘑鐮佺敓鎴愩€?>
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://devbox.tools">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="DevBox - 鍏嶈垂鍦ㄧ嚎寮€鍙戣€呭伐鍏风">
-<meta name="twitter:description" content="11娆惧厤璐瑰湪绾垮紑鍙戣€呭伐鍏凤紝鍗冲紑鍗崇敤锛屾暟鎹笉涓婁紶銆?>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-XXXXXXXXXX");</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"DevBox","url":"https://devbox.tools","description":"鍏嶈垂鍦ㄧ嚎寮€鍙戣€呭伐鍏风","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0"}}</script>
 </head>
 <body>
 <div class="container">
-  <header class="header">
-    <h1>馃洜 DevBox</h1>
-    <p>寮€鍙戣€呭湪绾垮伐鍏风 路 鍏嶈垂 路 鏃犻渶娉ㄥ唽 路 鏁版嵁涓嶄笂浼?/p>
-  </header>
+<header class="header"><h1>🛠 DevBox</h1><p>开发者在线工具箱 · 免费 · 无需注册 · 数据不上传</p></header>
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-tool="json" onclick="switchTab('json',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/><path d="M4 7V5a2 2 0 012-2h12a2 2 0 012 2v2"/><path d="M16 12h4"/><path d="M4 12h8"/></svg>JSON</button>
+  <button class="tab" data-tool="diff" onclick="switchTab('diff',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>文本对比</button>
+  <button class="tab" data-tool="qr" onclick="switchTab('qr',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M7 7h4v4H7z"/><path d="M13 7h4v4h-4z"/><path d="M7 13h4v4H7z"/></svg>二维码</button>
+  <button class="tab" data-tool="base64" onclick="switchTab('base64',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"/><path d="M4 20h8"/><path d="M4 16h12"/><path d="M4 12h12"/></svg>Base64</button>
+  <button class="tab" data-tool="ts" onclick="switchTab('ts',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>时间戳</button>
+  <button class="tab" data-tool="color" onclick="switchTab('color',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 18a6 6 0 100-12 6 6 0 000 12z"/></svg>颜色转换</button>
+  <button class="tab" data-tool="url" onclick="switchTab('url',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>URL</button>
+  <button class="tab" data-tool="hash" onclick="switchTab('hash',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9h16"/><path d="M4 15h16"/><path d="M10 3L8 21"/><path d="M16 3l-2 18"/></svg>哈希</button>
+  <button class="tab" data-tool="uuid" onclick="switchTab('uuid',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/><path d="M9 9h.01"/><path d="M15 9h.01"/><path d="M9 15h.01"/><path d="M15 15h.01"/></svg>UUID</button>
+  <button class="tab" data-tool="regex" onclick="switchTab('regex',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/><path d="M7 12l3-3 2 2 5-5"/></svg>正则</button>
+  <button class="tab" data-tool="pw" onclick="switchTab('pw',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11h14a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2v-7a2 2 0 012-2z"/><path d="M7 11V7a5 5 0 0110 0v4"/><path d="M12 16a1 1 0 100 2 1 1 0 000-2z"/></svg>密码</button>
+  <button class="tab" data-tool="img" onclick="switchTab('img',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M8.5 8.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/><path d="M21 15l-5-5L5 21"/></svg>图片Base64</button>
+  <button class="tab" data-tool="unit" onclick="switchTab('unit',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v4"/><path d="M4 14v6"/><path d="M10 1h4"/><path d="M20 10v4"/><path d="M14 20h4"/></svg>单位换算</button>
 
-  <!-- Tabs -->
-  <nav class="tabs" id="tabs">
-    <button class="tab active" data-tool="json" onclick="switchTab(&apos;json&apos;,this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/><path d="M4 7V5a2 2 0 012-2h12a2 2 0 012 2v2"/><line x1="16" y1="12" x2="20" y2="12"/><line x1="4" y1="12" x2="12" y2="12"/></svg>
-      JSON
-    </button>
-    <button class="tab" data-tool="diff" onclick="switchTab(&apos;diff&apos;,this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-      鏂囨湰瀵规瘮
-    </button>
-    <button class="tab" data-tool="qr" onclick="switchTab(&apos;qr&apos;,this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="4" height="4"/><rect x="13" y="7" width="4" height="4"/><rect x="7" y="13" width="4" height="4"/><line x1="13" y1="13" x2="13" y2="15"/><line x1="15" y1="13" x2="15" y2="13.01"/></svg>
-      浜岀淮鐮?
-    </button>
-    <button class="tab" data-tool="base64" onclick="switchTab(&apos;base64&apos;,this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="12" y2="20"/><line x1="4" y1="16" x2="16" y2="16"/><line x1="4" y1="12" x2="20" y2="12"/></svg>
-      Base64
-    </button>
-    <button class="tab" data-tool="timestamp" onclick="switchTab(&apos;timestamp&apos;,this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      鏃堕棿鎴?
-    </button>
-    <button class="tab" data-tool="color" onclick="switchTab(&apos;color&apos;,this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-      棰滆壊杞崲
-    </button>
-    <button class="tab" data-tool="url" onclick="switchTab(&apos;url&apos;,this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
-      URL
-    </button>
-    <button class="tab" data-tool="hash" onclick="switchTab(&apos;hash&apos;,this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
-      鍝堝笇
-    </button>
-    <button class="tab" data-tool="uuid" onclick="switchTab(&apos;uuid&apos;,this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="9" y2="9.01"/><line x1="15" y1="9" x2="15" y2="9.01"/><line x1="9" y1="15" x2="9" y2="15.01"/><line x1="15" y1="15" x2="15" y2="15.01"/></svg>
-      UUID
-    </button>
-    <button class="tab" data-tool="regex" onclick="switchTab(&apos;regex&apos;,this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="8.01"/><path d="M7 12l3-3 2 2 5-5"/></svg>
-      姝ｅ垯
-    </button>
-    <button class="tab" data-tool="password" onclick="switchTab(&apos;password&apos;,this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><circle cx="12" cy="16" r="1"/></svg>
-      瀵嗙爜
-    </button>
-    <button class="tab" data-tool="img2base64" onclick="switchTab(&apos;img2base64&apos;,this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      鍥剧墖杞珺ase64
-    </button>
-    <button class="tab" data-tool="unit" onclick="switchTab(&apos;unit&apos;,this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="4" x2="4" y2="8"/><line x1="4" y1="14" x2="4" y2="20"/><line x1="10" y1="1" x2="14" y1="1"/><line x1="20" y1="10" x2="20" y2="14"/><line x1="14" y1="20" x2="18" y2="20"/></svg>
-      鍗曚綅鎹㈢畻
-    </button>
-  </nav>
-
-  <!-- Tool: JSON Formatter -->
-  <div class="tool-panel active" id="panel-json">
-    <div class="card">
-      <h2>馃搵 JSON 鏍煎紡鍖?& 楠岃瘉</h2>
-      <textarea id="json-input" placeholder='绮樿创 JSON 瀛楃涓诧紝渚嬪: {"name":"寮犱笁","age":25,"hobbies":["coding","reading"]}'></textarea>
-      <div class="btn-group">
-        <button class="btn btn-primary" onclick="formatJSON()">鉁?鏍煎紡鍖?/button>
-        <button class="btn btn-secondary" onclick="compressJSON()">馃棞 鍘嬬缉</button>
-        <button class="btn btn-secondary" onclick="validateJSON()">鉁?楠岃瘉</button>
-        <button class="btn btn-secondary" onclick="clearJSON()">馃棏 娓呯┖</button>
-        <button class="btn btn-sm btn-secondary" onclick="copyOutput('json-input')">馃搵 澶嶅埗</button>
-      </div>
-      <div id="json-status"></div>
-    </div>
-    <div class="card">
-      <h2>馃搳 JSON 鏍戝舰瑙嗗浘</h2>
-      <div id="json-tree" style="font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; overflow-x: auto;"></div>
-    </div>
-  </div>
-
-  <!-- Tool: Text Diff -->
-  <div class="tool-panel" id="panel-diff">
-    <div class="card">
-      <h2>馃摑 鏂囨湰宸紓瀵规瘮</h2>
-      <div class="row">
-        <div class="col">
-          <label style="display:block;margin-bottom:6px;color:var(--muted);font-size:0.85rem;">鍘熷鏂囨湰</label>
-          <textarea id="diff-original" placeholder="绮樿创鍘熷鏂囨湰..."></textarea>
-        </div>
-        <div class="col">
-          <label style="display:block;margin-bottom:6px;color:var(--muted);font-size:0.85rem;">淇敼鍚庢枃鏈?/label>
-          <textarea id="diff-modified" placeholder="绮樿创淇敼鍚庢枃鏈?.."></textarea>
-        </div>
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-primary" onclick="compareDiff()">馃攳 瀵规瘮宸紓</button>
-        <button class="btn btn-secondary" onclick="swapDiff()">馃攧 浜ゆ崲</button>
-        <button class="btn btn-secondary" onclick="clearDiff()">馃棏 娓呯┖</button>
-      </div>
-    </div>
-    <div class="card">
-      <h2>馃搳 瀵规瘮缁撴灉</h2>
-      <div class="diff-pane" id="diff-result">
-        <span style="color:var(--muted);">鐐瑰嚮"瀵规瘮宸紓"鏌ョ湅缁撴灉...</span>
-      </div>
-    </div>
-  </div>
-  <!-- Ad Slot -->
-  <div class="ad-container">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-         data-ad-slot="1234567890"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-  <!-- Tool: QR Code -->
-  <div class="tool-panel" id="panel-qr">
-    <div class="card">
-      <h2>馃摫 浜岀淮鐮佺敓鎴愬櫒</h2>
-      <div class="row" style="align-items:flex-end;">
-        <div class="col" style="flex:2;">
-          <label style="display:block;margin-bottom:6px;color:var(--muted);font-size:0.85rem;">杈撳叆鏂囨湰鎴栫綉鍧€</label>
-          <input type="text" id="qr-text" placeholder="https://example.com 鎴栦换鎰忔枃鏈? oninput="generateQR()">
-        </div>
-        <div class="col">
-          <label style="display:block;margin-bottom:6px;color:var(--muted);font-size:0.85rem;">灏哄 (px)</label>
-          <input type="number" id="qr-size" value="256" min="128" max="1024" onchange="generateQR()" style="width:100px;">
-        </div>
-      </div>
-      <div class="qr-container">
-        <canvas id="qrcode-canvas"></canvas>
-      </div>
-      <div class="btn-group" style="justify-content:center;">
-        <button class="btn btn-primary" onclick="downloadQR()">馃捑 涓嬭浇 PNG</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Tool: Base64 -->
-  <div class="tool-panel" id="panel-base64">
-    <div class="card">
-      <h2>馃攼 Base64 缂栬В鐮?/h2>
-      <textarea id="base64-input" placeholder="杈撳叆瑕佺紪鐮佺殑鏂囨湰锛屾垨绮樿创 Base64 瀛楃涓茶繘琛岃В鐮?.."></textarea>
-      <div class="btn-group">
-        <button class="btn btn-primary" onclick="encodeBase64()">馃敀 缂栫爜 (Encode)</button>
-        <button class="btn btn-primary" onclick="decodeBase64()">馃敁 瑙ｇ爜 (Decode)</button>
-        <button class="btn btn-secondary" onclick="swapBase64()">馃攧 浜ゆ崲</button>
-        <button class="btn btn-sm btn-secondary" onclick="copyOutput('base64-input')">馃搵 澶嶅埗</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Tool: Timestamp -->
-  <div class="tool-panel" id="panel-timestamp">
-    <div class="card">
-      <h2>鈴?鏃堕棿鎴宠浆鎹?/h2>
-      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;">
-        <span style="color:var(--muted);font-size:0.9rem;">褰撳墠鏃堕棿鎴筹紙绉掞級锛?/span>
-        <code id="current-ts" style="background:var(--bg);padding:6px 12px;border-radius:6px;font-size:1.1rem;"></code>
-      </div>
-      <div class="row" style="align-items:flex-end;">
-        <div class="col" style="flex:2;">
-          <label style="display:block;margin-bottom:6px;color:var(--muted);font-size:0.85rem;">鏃堕棿鎴?鈫?鏃ユ湡杞崲</label>
-          <input type="text" id="ts-input" placeholder="杈撳叆鏃堕棿鎴?绉? 鎴?鏃ユ湡(濡?2024-01-01 12:00:00)">
-        </div>
-        <div class="col" style="flex:0 0 auto;">
-          <button class="btn btn-primary" onclick="convertTimestamp()">馃攧 杞崲</button>
-        </div>
-      </div>
-      <div id="ts-result" style="margin-top:16px;"></div>
-    </div>
-  </div>
-  <!-- Ad Slot -->
-  <div class="ad-container">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-         data-ad-slot="1234567890"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-  <!-- Tool: Color Converter -->
-  <div class="tool-panel" id="panel-color">
-    <div class="card">
-      <h2>馃帹 棰滆壊鏍煎紡杞崲</h2>
-      <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
-        <div style="flex:1;min-width:240px;">
-          <label style="display:block;margin-bottom:6px;color:var(--muted);font-size:0.85rem;">杈撳叆棰滆壊鍊?/label>
-          <input type="text" id="color-input" placeholder="#6366f1 鎴?rgb(99,102,241) 鎴?hsl(239,84%,67%)" oninput="convertColor()">
-          <div id="color-results" style="margin-top:14px;"></div>
-        </div>
-        <div class="color-preview" id="color-preview" style="background:#6366f1;"></div>
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-sm btn-secondary" onclick="randomColor()">馃幉 闅忔満棰滆壊</button>
-        <button class="btn btn-sm btn-secondary" onclick="copyOutput('color-input')">馃搵 澶嶅埗</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Tool: URL Encode/Decode -->
-  <div class="tool-panel" id="panel-url">
-    <div class="card">
-      <h2>馃敆 URL 缂栬В鐮?/h2>
-      <textarea id="url-input" placeholder="杈撳叆瑕佺紪鐮佺殑鏂囨湰锛屾垨绮樿创 URL 缂栫爜鍚庣殑瀛楃涓茶繘琛岃В鐮?.."></textarea>
-      <div class="btn-group">
-        <button class="btn btn-primary" onclick="encodeURL()">馃敀 缂栫爜 (Encode)</button>
-        <button class="btn btn-primary" onclick="decodeURL()">馃敁 瑙ｇ爜 (Decode)</button>
-        <button class="btn btn-sm btn-secondary" onclick="copyOutput('url-input')">馃搵 澶嶅埗</button>
-      </div>
-    </div>
-  </div>
-  <!-- Tool: Hash -->
-  <div class="tool-panel" id="panel-hash">
-    <div class="card">
-      <h2>馃攼 鍝堝笇璁＄畻</h2>
-      <textarea id="hash-input" placeholder="杈撳叆鏂囨湰璁＄畻鍝堝笇鍊?.."></textarea>
-      <div class="btn-group">
-        <button class="btn btn-primary" onclick="computeHash('MD5')">MD5</button>
-        <button class="btn btn-primary" onclick="computeHash('SHA-1')">SHA-1</button>
-        <button class="btn btn-primary" onclick="computeHash('SHA-256')">SHA-256</button>
-        <button class="btn btn-primary" onclick="computeHash('SHA-512')">SHA-512</button>
-      </div>
-      <div id="hash-result" style="margin-top:14px;"></div>
-    </div>
-  </div>
-  <!-- Tool: UUID Generator -->
-  <div class="tool-panel" id="panel-uuid">
-    <div class="card">
-      <h2>馃啍 UUID 鐢熸垚鍣?/h2>
-      <div class="btn-group" style="margin-bottom:16px;">
-        <button class="btn btn-primary" onclick="generateUUIDs(1)">鐢熸垚 1 涓?/button>
-        <button class="btn btn-primary" onclick="generateUUIDs(5)">鐢熸垚 5 涓?/button>
-        <button class="btn btn-primary" onclick="generateUUIDs(10)">鐢熸垚 10 涓?/button>
-        <button class="btn btn-primary" onclick="generateUUIDs(50)">鐢熸垚 50 涓?/button>
-        <button class="btn btn-sm btn-secondary" onclick="clearUUIDs()">馃棏 娓呯┖</button>
-      </div>
-      <div id="uuid-list" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;line-height:2;"></div>
-    </div>
-  </div>
-  <!-- Tool: Regex Tester -->
-  <div class="tool-panel" id="panel-regex">
-    <div class="card">
-      <h2>馃攳 姝ｅ垯琛ㄨ揪寮忔祴璇曞櫒</h2>
-      <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:1.1rem;color:var(--muted);">/</span>
-        <input type="text" id="regex-pattern" placeholder="姝ｅ垯琛ㄨ揪寮? oninput="testRegex()" style="flex:1;min-width:200px;">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:1.1rem;color:var(--muted);">/</span>
-        <input type="text" id="regex-flags" placeholder="gim" oninput="testRegex()" style="width:70px;text-align:center;" maxlength="6">
-      </div>
-      <textarea id="regex-input" placeholder="杈撳叆娴嬭瘯鏂囨湰..." oninput="testRegex()" style="min-height:120px;"></textarea>
-      <div id="regex-result" style="margin-top:14px;"></div>
-    </div>
-  </div>
-  <!-- Ad Slot -->
-  <div class="ad-container">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-         data-ad-slot="1234567890"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-  <!-- Tool: Password Generator -->
-  <div class="tool-panel" id="panel-password">
-    <div class="card">
-      <h2>馃攽 瀵嗙爜鐢熸垚鍣?/h2>
-      <div style="margin-bottom:16px;">
-        <label style="display:block;margin-bottom:6px;color:var(--muted);font-size:0.85rem;">瀵嗙爜闀垮害: <strong id="pw-len-label">16</strong></label>
-        <input type="range" id="pw-length" min="8" max="64" value="16" oninput="document.getElementById('pw-len-label').textContent=this.value" style="width:100%;accent-color:var(--primary);">
-      </div>
-      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;">
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" id="pw-upper" checked> 澶у啓瀛楁瘝</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" id="pw-lower" checked> 灏忓啓瀛楁瘝</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" id="pw-number" checked> 鏁板瓧</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" id="pw-symbol" checked> 绗﹀彿</label>
-      </div>
-      <div id="pw-display" style="background:var(--bg);padding:16px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:1.2rem;word-break:break-all;margin-bottom:12px;min-height:50px;display:flex;align-items:center;">鐐瑰嚮鐢熸垚瀵嗙爜</div>
-      <div class="btn-group">
-        <button class="btn btn-primary" onclick="generatePassword()">馃幉 鐢熸垚瀵嗙爜</button>
-        <button class="btn btn-sm btn-secondary" onclick="copyPassword()">馃搵 澶嶅埗</button>
-      </div>
-      <div id="pw-strength" style="margin-top:10px;"></div>
-    </div>
-  </div>
-
-  <!-- Tool: Image to Base64 -->
-  <div class="tool-panel" id="panel-img2base64">
-    <div class="card">
-      <h2>馃柤 鍥剧墖杞?Base64</h2>
-      <div style="border:2px dashed var(--border);border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:var(--transition);margin-bottom:16px;"
-           id="img-dropzone"
-           ondragover="event.preventDefault();this.style.borderColor='var(--primary)';"
-           ondragleave="this.style.borderColor='var(--border)';"
-           ondrop="handleImageDrop(event)"
-           onclick="document.getElementById('img-file').click()">
-        <input type="file" id="img-file" accept="image/*" onchange="handleImageSelect(this)" style="display:none;">
-        <div style="font-size:2.5rem;margin-bottom:8px;">馃搧</div>
-        <div style="color:var(--muted);">鐐瑰嚮涓婁紶鎴栨嫋鎷藉浘鐗囧埌姝ゅ</div>
-        <div style="color:var(--muted);font-size:0.8rem;margin-top:4px;">鏀寔 JPG / PNG / GIF / WebP / SVG</div>
-      </div>
-      <div id="img-preview" style="text-align:center;margin-bottom:12px;display:none;">
-        <img id="img-preview-el" style="max-width:100%;max-height:200px;border-radius:8px;">
-        <div style="color:var(--muted);font-size:0.85rem;margin-top:6px;" id="img-info"></div>
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-primary" onclick="convertImageToBase64()" id="img-convert-btn" disabled>馃攧 杞崲涓?Base64</button>
-        <button class="btn btn-sm btn-secondary" onclick="copyBase64Result()">馃搵 澶嶅埗缁撴灉</button>
-      </div>
-      <textarea id="img-base64-result" placeholder="Base64 缁撴灉灏嗘樉绀哄湪杩欓噷..." style="margin-top:12px;min-height:80px;font-size:0.8rem;" readonly></textarea>
-    </div>
-  </div>
-  <!-- Tool: Unit Converter -->
-  <div class="tool-panel" id="panel-unit">
-    <div class="card">
-      <h2>馃搻 鍗曚綅鎹㈢畻鍣?/h2>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
-        <button class="btn btn-sm btn-primary unit-cat active" onclick="switchUnitCat('length',this)">馃搹 闀垮害</button>
-        <button class="btn btn-sm btn-secondary unit-cat" onclick="switchUnitCat('weight',this)">鈿?閲嶉噺</button>
-        <button class="btn btn-sm btn-secondary unit-cat" onclick="switchUnitCat('temp',this)">馃尅 娓╁害</button>
-        <button class="btn btn-sm btn-secondary unit-cat" onclick="switchUnitCat('area',this)">馃搻 闈㈢Н</button>
-        <button class="btn btn-sm btn-secondary unit-cat" onclick="switchUnitCat('volume',this)">馃Т 浣撶Н</button>
-        <button class="btn btn-sm btn-secondary unit-cat" onclick="switchUnitCat('speed',this)">馃殌 閫熷害</button>
-      </div>
-      <div class="row" style="align-items:flex-end;">
-        <div class="col">
-          <label style="display:block;margin-bottom:4px;color:var(--muted);font-size:0.85rem;">杈撳叆鍊?/label>
-          <input type="number" id="unit-value" value="1" oninput="convertUnit()" style="font-size:1.1rem;">
-        </div>
-        <div class="col">
-          <label style="display:block;margin-bottom:4px;color:var(--muted);font-size:0.85rem;">浠?/label>
-          <select id="unit-from" onchange="convertUnit()" style="width:100%;padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:0.9rem;"></select>
-        </div>
-        <div style="display:flex;align-items:center;padding-bottom:4px;">
-          <span style="font-size:1.3rem;color:var(--primary);">鈫?/span>
-        </div>
-        <div class="col">
-          <label style="display:block;margin-bottom:4px;color:var(--muted);font-size:0.85rem;">鍒?/label>
-          <select id="unit-to" onchange="convertUnit()" style="width:100%;padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:0.9rem;"></select>
-        </div>
-      </div>
-      <div id="unit-result" style="margin-top:16px;font-size:1.3rem;text-align:center;font-family:'JetBrains Mono',monospace;background:var(--bg);padding:16px;border-radius:8px;"></div>
-    </div>
-  </div>
-
-  <footer class="footer">
-    <p>DevBox 路 鏁版嵁浠呭湪娴忚鍣ㄦ湰鍦板鐞嗭紝涓嶄細涓婁紶鑷虫湇鍔″櫒</p>
-  </footer>
+<!-- JSON -->
+<div class="tool-panel active" id="panel-json">
+<div class="card"><h2>📋 JSON 格式化 & 验证</h2>
+<textarea id="json-input" placeholder="粘贴 JSON 字符串"></textarea>
+<div class="btn-group">
+<button class="btn btn-primary" onclick="formatJSON()">✨ 格式化</button>
+<button class="btn btn-secondary" onclick="compressJSON()">🗜 压缩</button>
+<button class="btn btn-secondary" onclick="validateJSON()">✅ 验证</button>
+<button class="btn btn-sm btn-secondary" onclick="copyText('json-input')">📋 复制</button>
+</div><div id="json-status"></div></div>
+<div class="card"><h2>📊 树形视图</h2><div id="json-tree" style="font-family:monospace;font-size:.88rem;overflow-x:auto"></div></div>
 </div>
 
+<!-- Diff -->
+<div class="tool-panel" id="panel-diff">
+<div class="card"><h2>📝 文本差异对比</h2>
+<div class="row"><div class="col"><label style="display:block;margin-bottom:6px;color:var(--muted);font-size:.85rem">原始文本</label><textarea id="diff-original" placeholder="粘贴原始文本"></textarea></div>
+<div class="col"><label style="display:block;margin-bottom:6px;color:var(--muted);font-size:.85rem">修改后文本</label><textarea id="diff-modified" placeholder="粘贴修改后文本"></textarea></div></div>
+<div class="btn-group"><button class="btn btn-primary" onclick="compareDiff()">🔍 对比差异</button>
+<button class="btn btn-sm btn-secondary" onclick="clearDiff()">🗑 清空</button></div></div>
+<div class="card"><h2>📊 对比结果</h2><div class="diff-pane" id="diff-result"><span style="color:var(--muted)">点击对比查看结果</span></div></div>
+</div>
+
+<!-- QR -->
+<div class="tool-panel" id="panel-qr">
+<div class="card"><h2>📱 二维码生成器</h2>
+<div class="row" style="align-items:flex-end"><div class="col" style="flex:2"><input type="text" id="qr-text" placeholder="输入文本或网址" oninput="generateQR()"></div>
+<div class="col"><input type="number" id="qr-size" value="256" min="128" max="1024" onchange="generateQR()" style="width:100px"></div></div>
+<div class="qr-container"><canvas id="qrcode-canvas"></canvas></div>
+<div class="btn-group" style="justify-content:center"><button class="btn btn-primary" onclick="downloadQR()">💾 下载 PNG</button></div></div>
+</div>
+
+<!-- Base64 -->
+<div class="tool-panel" id="panel-base64">
+<div class="card"><h2>🔐 Base64 编解码</h2>
+<textarea id="base64-input" placeholder="输入文本或 Base64 字符串"></textarea>
+<div class="btn-group"><button class="btn btn-primary" onclick="encodeBase64()">🔒 编码</button>
+<button class="btn btn-primary" onclick="decodeBase64()">🔓 解码</button>
+<button class="btn btn-sm btn-secondary" onclick="copyText('base64-input')">📋 复制</button></div></div>
+</div>
+
+<!-- Timestamp -->
+<div class="tool-panel" id="panel-ts">
+<div class="card"><h2>⏰ 时间戳转换</h2>
+<div style="margin-bottom:16px"><span style="color:var(--muted);font-size:.9rem">当前：</span><code id="current-ts" style="background:var(--bg);padding:6px 12px;border-radius:6px;font-size:1.1rem"></code></div>
+<div class="row" style="align-items:flex-end"><div class="col" style="flex:2"><input type="text" id="ts-input" placeholder="输入时间戳 或 日期"></div>
+<div class="col" style="flex:0 0 auto"><button class="btn btn-primary" onclick="convertTimestamp()">🔄 转换</button></div></div>
+<div id="ts-result" style="margin-top:16px"></div></div>
+</div>
+
+<!-- Color -->
+<div class="tool-panel" id="panel-color">
+<div class="card"><h2>🎨 颜色格式转换</h2>
+<div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap"><div style="flex:1;min-width:240px"><input type="text" id="color-input" placeholder="#6366f1 或 rgb(99,102,241)" oninput="convertColor()"><div id="color-results" style="margin-top:14px"></div></div>
+<div class="color-preview" id="color-preview" style="background:#6366f1"></div></div>
+<div class="btn-group"><button class="btn btn-sm btn-secondary" onclick="randomColor()">🎲 随机</button>
+<button class="btn btn-sm btn-secondary" onclick="copyText('color-input')">📋 复制</button></div></div>
+</div>
+
+<!-- URL -->
+<div class="tool-panel" id="panel-url">
+<div class="card"><h2>🔗 URL 编解码</h2>
+<textarea id="url-input" placeholder="输入文本或 URL 编码字符串"></textarea>
+<div class="btn-group"><button class="btn btn-primary" onclick="encodeURL()">🔒 编码</button>
+<button class="btn btn-primary" onclick="decodeURL()">🔓 解码</button>
+<button class="btn btn-sm btn-secondary" onclick="copyText('url-input')">📋 复制</button></div></div>
+</div>
+
+<!-- Hash -->
+<div class="tool-panel" id="panel-hash">
+<div class="card"><h2>🔐 哈希计算</h2>
+<textarea id="hash-input" placeholder="输入文本"></textarea>
+<div class="btn-group">
+<button class="btn btn-primary" onclick="computeHash('MD5')">MD5</button>
+<button class="btn btn-primary" onclick="computeHash('SHA-1')">SHA-1</button>
+<button class="btn btn-primary" onclick="computeHash('SHA-256')">SHA-256</button>
+<button class="btn btn-primary" onclick="computeHash('SHA-512')">SHA-512</button>
+</div><div id="hash-result" style="margin-top:14px"></div></div>
+</div>
+
+<!-- UUID -->
+<div class="tool-panel" id="panel-uuid">
+<div class="card"><h2>🆔 UUID 生成器</h2>
+<div class="btn-group" style="margin-bottom:16px">
+<button class="btn btn-primary" onclick="generateUUIDs(1)">生成 1 个</button>
+<button class="btn btn-primary" onclick="generateUUIDs(5)">生成 5 个</button>
+<button class="btn btn-primary" onclick="generateUUIDs(10)">生成 10 个</button>
+<button class="btn btn-primary" onclick="generateUUIDs(50)">生成 50 个</button>
+<button class="btn btn-sm btn-secondary" onclick="document.getElementById('uuid-list').innerHTML=''">🗑 清空</button>
+</div><div id="uuid-list" style="font-family:monospace;font-size:.85rem;line-height:2"></div></div>
+</div>
+
+<!-- Regex -->
+<div class="tool-panel" id="panel-regex">
+<div class="card"><h2>🔍 正则测试器</h2>
+<div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap"><span style="font-family:monospace;font-size:1.1rem;color:var(--muted)">/</span><input type="text" id="regex-pattern" placeholder="正则表达式" oninput="testRegex()" style="flex:1;min-width:200px"><span style="font-family:monospace;font-size:1.1rem;color:var(--muted)">/</span><input type="text" id="regex-flags" placeholder="gim" oninput="testRegex()" style="width:70px;text-align:center" maxlength="6"></div>
+<textarea id="regex-input" placeholder="测试文本" oninput="testRegex()" style="min-height:120px"></textarea>
+<div id="regex-result" style="margin-top:14px"></div></div>
+</div>
+
+<!-- Password -->
+<div class="tool-panel" id="panel-pw">
+<div class="card"><h2>🔑 密码生成器</h2>
+<div style="margin-bottom:16px"><label style="display:block;margin-bottom:6px;color:var(--muted);font-size:.85rem">长度: <strong id="pw-len-label">16</strong></label><input type="range" id="pw-length" min="8" max="64" value="16" oninput="document.getElementById('pw-len-label').textContent=this.value" style="width:100%;accent-color:var(--primary)"></div>
+<div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="pw-upper" checked> 大写</label>
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="pw-lower" checked> 小写</label>
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="pw-number" checked> 数字</label>
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="pw-symbol" checked> 符号</label></div>
+<div id="pw-display" style="background:var(--bg);padding:16px;border-radius:8px;font-family:monospace;font-size:1.2rem;word-break:break-all;min-height:50px">点击生成</div>
+<div class="btn-group"><button class="btn btn-primary" onclick="generatePassword()">🎲 生成</button>
+<button class="btn btn-sm btn-secondary" onclick="copyPassword()">📋 复制</button></div>
+<div id="pw-strength" style="margin-top:10px"></div></div>
+</div>
+
+<!-- Image Base64 -->
+<div class="tool-panel" id="panel-img">
+<div class="card"><h2>🖼 图片转 Base64</h2>
+<div style="border:2px dashed var(--border);border-radius:12px;padding:32px;text-align:center;cursor:pointer;margin-bottom:16px" id="img-dropzone" ondragover="event.preventDefault();this.style.borderColor='var(--primary)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleImageDrop(event)" onclick="document.getElementById('img-file').click()">
+<input type="file" id="img-file" accept="image/*" onchange="handleImageSelect(this)" style="display:none">
+<div style="font-size:2.5rem;margin-bottom:8px">📁</div><div style="color:var(--muted)">点击或拖拽上传图片</div></div>
+<div id="img-preview" style="text-align:center;margin-bottom:12px;display:none"><img id="img-preview-el" style="max-width:100%;max-height:200px;border-radius:8px"><div id="img-info" style="color:var(--muted);font-size:.85rem;margin-top:6px"></div></div>
+<div class="btn-group"><button class="btn btn-primary" onclick="convertImage()" id="img-convert-btn" disabled>🔄 转换</button>
+<button class="btn btn-sm btn-secondary" onclick="copyText('img-result')">📋 复制</button></div>
+<textarea id="img-result" placeholder="Base64 结果" style="margin-top:12px;min-height:80px;font-size:.8rem" readonly></textarea></div>
+</div>
+
+<!-- Unit -->
+<div class="tool-panel" id="panel-unit">
+<div class="card"><h2>📐 单位换算器</h2>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px" id="unit-cats">
+<button class="btn btn-sm btn-primary unit-cat" data-cat="length">📏 长度</button>
+<button class="btn btn-sm btn-secondary unit-cat" data-cat="weight">⚖ 重量</button>
+<button class="btn btn-sm btn-secondary unit-cat" data-cat="temp">🌡 温度</button>
+<button class="btn btn-sm btn-secondary unit-cat" data-cat="area">📐 面积</button>
+<button class="btn btn-sm btn-secondary unit-cat" data-cat="volume">🧴 体积</button>
+<button class="btn btn-sm btn-secondary unit-cat" data-cat="speed">🚀 速度</button>
+</div>
+<div class="row" style="align-items:flex-end"><div class="col"><input type="number" id="unit-value" value="1" oninput="convertUnit()" style="font-size:1.1rem"></div>
+<div class="col"><select id="unit-from" onchange="convertUnit()" style="padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem"></select></div>
+<div style="display:flex;align-items:center;padding-bottom:4px"><span style="font-size:1.3rem;color:var(--primary)">→</span></div>
+<div class="col"><select id="unit-to" onchange="convertUnit()" style="padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem"></select></div></div>
+<div id="unit-result" style="margin-top:16px;font-size:1.3rem;text-align:center;font-family:monospace;background:var(--bg);padding:16px;border-radius:8px"></div></div>
+</div>
+
+<footer class="footer"><p>DevBox · 数据仅在浏览器本地处理</p></footer>
+</div>
 <div class="toast" id="toast"></div>
-
 <script>
-// ====== Tab Switching ======
-function switchTab(tool, btn) {
-  var tabs = document.querySelectorAll(".tab");
-  for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove("active");
-  var panels = document.querySelectorAll(".tool-panel");
-  for (var i = 0; i < panels.length; i++) panels[i].classList.remove("active");
-  btn.classList.add("active");
-  var panel = document.getElementById("panel-" + tool);
-  if (panel) panel.classList.add("active");
+function switchTab(tool,btn){
+var i,ts=document.querySelectorAll(".tab"),ps=document.querySelectorAll(".tool-panel");
+for(i=0;i<ts.length;i++)ts[i].classList.remove("active");
+for(i=0;i<ps.length;i++)ps[i].classList.remove("active");
+btn.classList.add("active");
+var p=document.getElementById("panel-"+tool);if(p)p.classList.add("active");
 }
-
-// ====== Toast ======
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
-}
-function copyOutput(id) {
-  const el = document.getElementById(id);
-  if (!el.value.trim()) { showToast('鈿?鍐呭涓虹┖'); return; }
-  navigator.clipboard.writeText(el.value).then(() => showToast('鉁?宸插鍒跺埌鍓创鏉?));
-}
-
-// ====== JSON Tool ======
-function formatJSON() {
-  const input = document.getElementById('json-input');
-  try {
-    const obj = JSON.parse(input.value);
-    input.value = JSON.stringify(obj, null, 2);
-    showStatus('json-status', '鉁?鏈夋晥鐨?JSON锛屽凡鏍煎紡鍖?, 'success');
-    renderJSONTree(obj);
-  } catch(e) {
-    showStatus('json-status', '鉂?' + e.message, 'error');
-    document.getElementById('json-tree').innerHTML = '';
-  }
-}
-function compressJSON() {
-  const input = document.getElementById('json-input');
-  try {
-    const obj = JSON.parse(input.value);
-    input.value = JSON.stringify(obj);
-    showStatus('json-status', '鉁?宸插帇缂?, 'success');
-  } catch(e) {
-    showStatus('json-status', '鉂?' + e.message, 'error');
-  }
-}
-function validateJSON() {
-  const input = document.getElementById('json-input');
-  try {
-    JSON.parse(input.value);
-    showStatus('json-status', '鉁?JSON 鏍煎紡鏈夋晥', 'success');
-  } catch(e) {
-    showStatus('json-status', '鉂?' + e.message, 'error');
-  }
-}
-function clearJSON() {
-  document.getElementById('json-input').value = '';
-  document.getElementById('json-status').innerHTML = '';
-  document.getElementById('json-tree').innerHTML = '';
-}
-function showStatus(id, msg, type) {
-  document.getElementById(id).innerHTML = '<div class="info-bar ' + type + '">' + msg + '</div>';
-}
-
-function renderJSONTree(obj, depth = 0) {
-  const container = document.getElementById('json-tree');
-  const indent = '  '.repeat(depth);
-  const keyStyle = 'color:#93c5fd;';
-  const strStyle = 'color:#4ade80;';
-  const numStyle = 'color:#facc15;';
-  const boolStyle = 'color:#f472b6;';
-  const nullStyle = 'color:#94a3b8;';
-
-  function render(val, d) {
-    if (val === null) return '<span style="' + nullStyle + '">null</span>';
-    if (typeof val === 'boolean') return '<span style="' + boolStyle + '">' + val + '</span>';
-    if (typeof val === 'number') return '<span style="' + numStyle + '">' + val + '</span>';
-    if (typeof val === 'string') return '<span style="' + strStyle + '">"' + escapeHtml(val) + '"</span>';
-    if (Array.isArray(val)) {
-      if (val.length === 0) return '<span style="color:var(--muted);">[]</span>';
-      let html = '[\n';
-      val.forEach((item, i) => {
-        html += '  '.repeat(d+1) + render(item, d+1);
-        if (i < val.length - 1) html += ',';
-        html += '\n';
-      });
-      html += '  '.repeat(d) + ']';
-      return html;
-    }
-    if (typeof val === 'object') {
-      const keys = Object.keys(val);
-      if (keys.length === 0) return '<span style="color:var(--muted);">{}</span>';
-      let html = '{\n';
-      keys.forEach((k, i) => {
-        html += '  '.repeat(d+1) + '<span style="' + keyStyle + '">"' + escapeHtml(k) + '"</span>: ' + render(val[k], d+1);
-        if (i < keys.length - 1) html += ',';
-        html += '\n';
-      });
-      html += '  '.repeat(d) + '}';
-      return html;
-    }
-    return String(val);
-  }
-  container.innerHTML = '<pre style="margin:0;white-space:pre;">' + render(obj, 0) + '</pre>';
-}
-function escapeHtml(str) { return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-// ====== Diff Tool ======
-function compareDiff() {
-  const original = document.getElementById('diff-original').value;
-  const modified = document.getElementById('diff-modified').value;
-  const result = document.getElementById('diff-result');
-
-  if (!original && !modified) { result.innerHTML = '<span style="color:var(--muted);">璇疯緭鍏ユ枃鏈悗鍐嶅姣?/span>'; return; }
-
-  const oldLines = original.split('\n');
-  const newLines = modified.split('\n');
-  const lcs = buildLCS(oldLines, newLines);
-
-  let html = '';
-  let oi = 0, ni = 0, li = 0;
-
-  while (oi < oldLines.length || ni < newLines.length) {
-    if (li < lcs.length && oi < oldLines.length && oldLines[oi] === lcs[li]) {
-      html += '<div class="diff-line">  ' + escapeHtml(lcs[li]) + '</div>';
-      oi++; ni++; li++;
-    } else if (li < lcs.length && ni < newLines.length && newLines[ni] === lcs[li]) {
-      html += '<div class="diff-line diff-added">+ ' + escapeHtml(newLines[ni]) + '</div>';
-      ni++;
-    } else if (oi < oldLines.length && (li >= lcs.length || oldLines[oi] !== lcs[li])) {
-      html += '<div class="diff-line diff-removed">- ' + escapeHtml(oldLines[oi]) + '</div>';
-      oi++;
-    } else if (ni < newLines.length) {
-      html += '<div class="diff-line diff-added">+ ' + escapeHtml(newLines[ni]) + '</div>';
-      ni++;
-    } else {
-      break;
-    }
-  }
-  result.innerHTML = html || '<span style="color:var(--muted);">鏂囨湰瀹屽叏鐩稿悓</span>';
-}
-
-function buildLCS(a, b) {
-  const m = a.length, n = b.length;
-  const dp = Array.from({length: m+1}, () => new Array(n+1).fill(0));
-  for (let i = 1; i <= m; i++)
-    for (let j = 1; j <= n; j++)
-      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] + 1 : Math.max(dp[i-1][j], dp[i][j-1]);
-  const result = [];
-  let i = m, j = n;
-  while (i > 0 && j > 0) {
-    if (a[i-1] === b[j-1]) { result.unshift(a[i-1]); i--; j--; }
-    else if (dp[i-1][j] > dp[i][j-1]) i--;
-    else j--;
-  }
-  return result;
-}
-
-function swapDiff() {
-  const orig = document.getElementById('diff-original');
-  const mod = document.getElementById('diff-modified');
-  [orig.value, mod.value] = [mod.value, orig.value];
-  compareDiff();
-}
-function clearDiff() {
-  document.getElementById('diff-original').value = '';
-  document.getElementById('diff-modified').value = '';
-  document.getElementById('diff-result').innerHTML = '<span style="color:var(--muted);">鐐瑰嚮"瀵规瘮宸紓"鏌ョ湅缁撴灉...</span>';
-}
-
-// ====== QR Code Tool ======
-function generateQR() {
-  const text = document.getElementById('qr-text').value.trim();
-  const size = parseInt(document.getElementById('qr-size').value) || 256;
-  const canvas = document.getElementById('qrcode-canvas');
-  canvas.width = size; canvas.height = size;
-  if (!text) {
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#f1f5f9'; ctx.fillRect(0, 0, size, size);
-    ctx.fillStyle = '#94a3b8'; ctx.font = '14px sans-serif';
-    ctx.textAlign = 'center'; ctx.fillText('杈撳叆鏂囨湰鐢熸垚浜岀淮鐮?, size/2, size/2);
-    return;
-  }
-  QRCode.toCanvas(canvas, text, { width: size, margin: 2, color: { dark: '#0f172a', light: '#ffffff' } });
-}
-function downloadQR() {
-  const canvas = document.getElementById('qrcode-canvas');
-  const link = document.createElement('a');
-  link.download = 'qrcode.png';
-  link.href = canvas.toDataURL('image/png');
-  link.click();
-  showToast('鉁?浜岀淮鐮佸凡涓嬭浇');
-}
-
-// ====== Base64 Tool ======
-function encodeBase64() {
-  const input = document.getElementById('base64-input');
-  try { input.value = btoa(unescape(encodeURIComponent(input.value))); showToast('鉁?缂栫爜瀹屾垚'); }
-  catch(e) { showToast('鉂?缂栫爜澶辫触'); }
-}
-function decodeBase64() {
-  const input = document.getElementById('base64-input');
-  try { input.value = decodeURIComponent(escape(atob(input.value.trim()))); showToast('鉁?瑙ｇ爜瀹屾垚'); }
-  catch(e) { showToast('鉂?Base64 鏍煎紡鏃犳晥'); }
-}
-function swapBase64() {
-  const input = document.getElementById('base64-input');
-  try { input.value = decodeURIComponent(escape(atob(input.value.trim()))); }
-  catch(e) { /* just try */ }
-}
-
-// ====== Timestamp Tool ======
-function updateCurrentTS() {
-  document.getElementById('current-ts').textContent = Math.floor(Date.now() / 1000);
-}
-updateCurrentTS(); setInterval(updateCurrentTS, 1000);
-
-function convertTimestamp() {
-  const input = document.getElementById('ts-input').value.trim();
-  const result = document.getElementById('ts-result');
-  if (!input) { result.innerHTML = ''; return; }
-
-  // Try as timestamp
-  if (/^\d{1,13}$/.test(input)) {
-    let ts = parseInt(input);
-    if (ts > 9999999999) ts = Math.floor(ts / 1000); // milliseconds -> seconds
-    const d = new Date(ts * 1000);
-    result.innerHTML = 
-      <div class="info-bar success">
-        馃搮 鏈湴鏃堕棿: <br>
-        馃寪 UTC: <br>
-        馃搷 鏄熸湡: 
-      </div>;
-    return;
-  }
-
-  // Try as date string
-  const d = new Date(input);
-  if (!isNaN(d.getTime())) {
-    result.innerHTML = 
-      <div class="info-bar success">
-        馃敘 绉掔骇鏃堕棿鎴? <br>
-        馃敘 姣鏃堕棿鎴? 
-      </div>;
-    return;
-  }
-
-  result.innerHTML = '<div class="info-bar error">鉂?鏃犳硶璇嗗埆锛岃杈撳叆鏈夋晥鏃堕棿鎴虫垨鏃ユ湡</div>';
-}
-
-// ====== Color Tool ======
-function convertColor() {
-  const input = document.getElementById('color-input').value.trim();
-  const preview = document.getElementById('color-preview');
-  const results = document.getElementById('color-results');
-
-  // Parse color
-  let r, g, b;
-  let hex = input;
-
-  if (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(input)) {
-    hex = input.length === 4 ? '#' + input[1]+input[1]+input[2]+input[2]+input[3]+input[3] : input;
-    r = parseInt(hex.slice(1,3), 16);
-    g = parseInt(hex.slice(3,5), 16);
-    b = parseInt(hex.slice(5,7), 16);
-  } else {
-    const match = input.match(/rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/);
-    if (match) {
-      r = parseInt(match[1]); g = parseInt(match[2]); b = parseInt(match[3]);
-      hex = '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join('');
-    }
-  }
-
-  if (r === undefined) {
-    results.innerHTML = '<span style="color:var(--muted);">鏀寔鏍煎紡: #6366f1 鎴?rgb(99,102,241)</span>';
-    return;
-  }
-
-  preview.style.background = 'rgb(' + r + ',' + g + ',' + b + ')';
-
-  // RGB to HSL
-  const rf = r/255, gf = g/255, bf = b/255;
-  const max = Math.max(rf, gf, bf), min = Math.min(rf, gf, bf);
-  let h = 0, s = 0, l = (max + min) / 2;
-  if (max !== min) {
-    const d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    h = max === rf ? ((gf - bf) / d + (gf < bf ? 6 : 0)) / 6
-      : max === gf ? ((bf - rf) / d + 2) / 6
-      : ((rf - gf) / d + 4) / 6;
-  }
-  h = Math.round(h * 360); s = Math.round(s * 100); l = Math.round(l * 100);
-
-  results.innerHTML = 
-    <div style="font-family:'JetBrains Mono',monospace;font-size:0.9rem;line-height:2;">
-      <div><span style="color:var(--muted);">HEX: </span><strong></strong></div>
-      <div><span style="color:var(--muted);">RGB: </span><strong>rgb(, , )</strong></div>
-      <div><span style="color:var(--muted);">HSL: </span><strong>hsl(, %, %)</strong></div>
-    </div>;
-}
-function randomColor() {
-  const hex = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
-  document.getElementById('color-input').value = hex;
-  convertColor();
-}
-// ====== URL Tool ======
-function encodeURL() {
-  const input = document.getElementById("url-input");
-  try { input.value = encodeURIComponent(input.value); showToast("鉁?URL 缂栫爜瀹屾垚"); }
-  catch(e) { showToast("鉂?缂栫爜澶辫触"); }
-}
-function decodeURL() {
-  const input = document.getElementById("url-input");
-  try { input.value = decodeURIComponent(input.value.trim()); showToast("鉁?URL 瑙ｇ爜瀹屾垚"); }
-  catch(e) { showToast("鉂?鏃犳晥鐨?URL 缂栫爜"); }
-}
-// ====== Hash Tool (pure JS MD5 + Web Crypto SHA) ======
-function md5(str) {
-  function r(d,n){return(d<<n)|(d>>>(32-n));}
-  function q(s,l){var a,b,c,d;var x=[];for(var i=0;i<64;i+=4){a=(s.charCodeAt(i)||0)|((s.charCodeAt(i+1)||0)<<8)|((s.charCodeAt(i+2)||0)<<16)|((s.charCodeAt(i+3)||0)<<24);b=(s.charCodeAt(i+4)||0)|((s.charCodeAt(i+5)||0)<<8)|((s.charCodeAt(i+6)||0)<<16)|((s.charCodeAt(i+7)||0)<<24);c=(s.charCodeAt(i+8)||0)|((s.charCodeAt(i+9)||0)<<8)|((s.charCodeAt(i+10)||0)<<16)|((s.charCodeAt(i+11)||0)<<24);d=(s.charCodeAt(i+12)||0)|((s.charCodeAt(i+13)||0)<<8)|((s.charCodeAt(i+14)||0)<<16)|((s.charCodeAt(i+15)||0)<<24);a=qOp(a,b,c,d,s.charCodeAt(i+16)||0,7,0xd76aa478);d=qOp(d,a,b,c,s.charCodeAt(i+17)||0,12,0xe8c7b756);c=qOp(c,d,a,b,s.charCodeAt(i+18)||0,17,0x242070db);b=qOp(b,c,d,a,s.charCodeAt(i+19)||0,22,0xc1bdceee);a=qOp(a,b,c,d,s.charCodeAt(i+20)||0,7,0xf57c0faf);d=qOp(d,a,b,c,s.charCodeAt(i+21)||0,12,0x4787c62a);c=qOp(c,d,a,b,s.charCodeAt(i+22)||0,17,0xa8304613);b=qOp(b,c,d,a,s.charCodeAt(i+23)||0,22,0xfd469501);a=qOp(a,b,c,d,s.charCodeAt(i+24)||0,7,0x698098d8);d=qOp(d,a,b,c,s.charCodeAt(i+25)||0,12,0x8b44f7af);c=qOp(c,d,a,b,s.charCodeAt(i+26)||0,17,0xffff5bb1);b=qOp(b,c,d,a,s.charCodeAt(i+27)||0,22,0x895cd7be);a=qOp(a,b,c,d,s.charCodeAt(i+28)||0,7,0x6b901122);d=qOp(d,a,b,c,s.charCodeAt(i+29)||0,12,0xfd987193);c=qOp(c,d,a,b,s.charCodeAt(i+30)||0,17,0xa679438e);b=qOp(b,c,d,a,s.charCodeAt(i+31)||0,22,0x49b40821);var II=(c&b)|(d&(~b));a=r(a+II+l[0]+0x50a28be6,5)+b;var II=(b&a)|(c&(~a));d=r(d+II+l[1]+0x50a28be6,9)+a;var II=(a&d)|(b&(~d));c=r(c+II+l[2]+0x50a28be6,14)+d;var II=(d&c)|(a&(~c));b=r(b+II+l[3]+0x50a28be6,20)+c;var II=(c&b)|(d&(~b));a=r(a+II+l[4]+0x50a28be6,5)+b;var II=(b&a)|(c&(~a));d=r(d+II+l[5]+0x50a28be6,9)+a;var II=(a&d)|(b&(~d));c=r(c+II+l[6]+0x50a28be6,14)+d;var II=(d&c)|(a&(~c));b=r(b+II+l[7]+0x50a28be6,20)+c;var II=(c&b)|(d&(~b));a=r(a+II+l[8]+0x50a28be6,5)+b;var II=(b&a)|(c&(~a));d=r(d+II+l[9]+0x50a28be6,9)+a;var II=(a&d)|(b&(~d));c=r(c+II+l[10]+0x50a28be6,14)+d;var II=(d&c)|(a&(~c));b=r(b+II+l[11]+0x50a28be6,20)+c;var II=(c&b)|(d&(~b));a=r(a+II+l[12]+0x50a28be6,5)+b;var II=(b&a)|(c&(~a));d=r(d+II+l[13]+0x50a28be6,9)+a;var II=(a&d)|(b&(~d));c=r(c+II+l[14]+0x50a28be6,14)+d;var II=(d&c)|(a&(~c));b=r(b+II+l[15]+0x50a28be6,20)+c;x.push(a);x.push(b);x.push(c);x.push(d);}return x;}
-  function qOp(a,b,c,d,x,s,t){return r(a+(b&c)|((~b)&d)+x+t,s)+b;}
-  var l=[0xd76aa478,0xe8c7b756,0x242070db,0xc1bdceee,0xf57c0faf,0x4787c62a,0xa8304613,0xfd469501,0x698098d8,0x8b44f7af,0xffff5bb1,0x895cd7be,0x6b901122,0xfd987193,0xa679438e,0x49b40821];
-  var len=str.length;var s=str+String.fromCharCode(0x80);var pad=Array((len+8)%64<56?56-(len+8)%64:120-(len+8)%64);for(var i=0;i<pad.length;i++)s+=String.fromCharCode(0);
-  var bl=len*8;for(var i=0;i<4;i++)s+=String.fromCharCode(bl&0xff),bl>>=8;bl>>>=0;
-  var h=q(s,l);return h.map(function(w){var h=w.toString(16);return'0000000'.substr(0,8-h.length)+h;}).join('');
-}
-async function shaDigest(algo, msg) {
-  const enc = new TextEncoder();
-  const data = enc.encode(msg);
-  const hashBuf = await crypto.subtle.digest(algo, data);
-  return Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
-async function computeHash(algo) {
-  const input = document.getElementById('hash-input').value;
-  const result = document.getElementById('hash-result');
-  if (!input) { result.innerHTML = '<span style="color:var(--muted);">璇疯緭鍏ユ枃鏈?/span>'; return; }
-  try {
-    let hash;
-    if (algo === 'MD5') {
-      hash = md5(input);
-    } else {
-      const map = {'SHA-1':'SHA-1','SHA-256':'SHA-256','SHA-512':'SHA-512'};
-      hash = await shaDigest(map[algo], input);
-    }
-    result.innerHTML = '<div class="info-bar success"><strong>' + algo + ':</strong> <code style="word-break:break-all;">' + hash + '</code></div>';
-    // Also copy to clipboard
-    navigator.clipboard.writeText(hash).then(() => showToast('鉁?' + algo + ' 宸插鍒?));
-  } catch(e) {
-    result.innerHTML = '<div class="info-bar error">鉂?璁＄畻澶辫触: ' + e.message + '</div>';
-  }
-}
-// ====== UUID Tool ======
-function generateUUIDs(count) {
-  const list = document.getElementById('uuid-list');
-  let html = '';
-  for (let i = 0; i < count; i++) {
-    const uuid = crypto.randomUUID();
-    html += '<div style="display:flex;align-items:center;gap:8px;padding:4px 0;">'
-      + '<code>' + uuid + '</code>'
-      + '<button class="btn btn-sm btn-secondary" onclick="navigator.clipboard.writeText(\'' + uuid + '\');showToast(\'鉁?宸插鍒禱')" title="澶嶅埗">馃搵</button>'
-      + '</div>';
-  }
-  list.innerHTML = html;
-}
-function clearUUIDs() {
-  document.getElementById('uuid-list').innerHTML = '';
-}
-// ====== Regex Tool ======
-function testRegex() {
-  const pattern = document.getElementById('regex-pattern').value;
-  const flags = document.getElementById('regex-flags').value;
-  const input = document.getElementById('regex-input').value;
-  const result = document.getElementById('regex-result');
-  if (!pattern) { result.innerHTML = ''; return; }
-  try {
-    const re = new RegExp(pattern, flags);
-    const matches = [...input.matchAll(re)];
-    if (flags.includes('g') && matches.length > 0) {
-      let highlighted = input;
-      let offset = 0;
-      for (const m of matches) {
-        const before = highlighted.slice(0, m.index + offset);
-        const match = highlighted.slice(m.index + offset, m.index + offset + m[0].length);
-        const after = highlighted.slice(m.index + offset + m[0].length);
-        highlighted = before + '<mark style="background:rgba(99,102,241,0.4);border-radius:2px;padding:1px 0;">' + match + '</mark>' + after;
-        offset += '<mark style="background:rgba(99,102,241,0.4);border-radius:2px;padding:1px 0;"></mark>'.length;
-      }
-      result.innerHTML = '<div class="info-bar success">鉁?鍖归厤 ' + matches.length + ' 澶?/div>'
-        + '<div style="margin-top:8px;background:var(--bg);padding:12px;border-radius:8px;font-family:monospace;font-size:0.9rem;white-space:pre-wrap;word-break:break-all;">' + highlighted + '</div>';
-    } else if (!flags.includes('g') && re.test(input)) {
-      const m = input.match(re);
-      result.innerHTML = '<div class="info-bar success">鉁?鍖归厤鎴愬姛: <code>' + escapeHtml(m[0]) + '</code></div>'
-        + (m.length > 1 ? '<div style="margin-top:6px;color:var(--muted);font-size:0.85rem;">鎹曡幏缁? ' + m.slice(1).map((g,i) => '['+(i+1)+'] ' + escapeHtml(g||'')).join(', ') + '</div>' : '');
-    } else {
-      result.innerHTML = '<div class="info-bar error">鉂?娌℃湁鍖归厤</div>';
-    }
-  } catch(e) {
-    result.innerHTML = '<div class="info-bar error">鉂?姝ｅ垯璇硶閿欒: ' + e.message + '</div>';
-  }
-}
-// ====== Password Tool ======
-function generatePassword() {
-  const len = parseInt(document.getElementById('pw-length').value);
-  const upper = document.getElementById('pw-upper').checked;
-  const lower = document.getElementById('pw-lower').checked;
-  const number = document.getElementById('pw-number').checked;
-  const symbol = document.getElementById('pw-symbol').checked;
-  const chars = [];
-  if (upper) chars.push('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
-  if (lower) chars.push('abcdefghijklmnopqrstuvwxyz');
-  if (number) chars.push('0123456789');
-  if (symbol) chars.push('!@#$%^&*()_+-=[]{}|;:,.<>?');
-  if (chars.length === 0) {
-    document.getElementById('pw-display').textContent = '璇疯嚦灏戦€夋嫨涓€绉嶅瓧绗︾被鍨?;
-    document.getElementById('pw-strength').innerHTML = '';
-    return;
-  }
-  const all = chars.join('');
-  const arr = new Uint32Array(len);
-  crypto.getRandomValues(arr);
-  let pw = '';
-  for (let i = 0; i < len; i++) pw += all[arr[i] % all.length];
-  // Ensure at least one from each selected type
-  let forced = '';
-  if (upper) forced += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[arr[0] % 26];
-  if (lower) forced += 'abcdefghijklmnopqrstuvwxyz'[arr[1] % 26];
-  if (number) forced += '0123456789'[arr[2] % 10];
-  if (symbol) forced += '!@#$%^&*()_+-=[]{}|;:,.<>?'[arr[3] % 26];
-  pw = forced + pw.slice(forced.length);
-  document.getElementById('pw-display').textContent = pw;
-  // Strength indicator
-  let score = 0;
-  if (len >= 12) score++; if (len >= 16) score++;
-  if (upper) score++; if (lower) score++; if (number) score++; if (symbol) score++;
-  const levels = ['馃敶 寮?, '馃煛 涓€鑸?, '馃煝 寮?, '馃煟 闈炲父寮?];
-  const idx = Math.min(3, Math.floor(score / 2));
-  document.getElementById('pw-strength').innerHTML = '<div class="info-bar ' + (idx>=2?'success':'error') + '">寮哄害: ' + levels[idx] + ' (闀垮害' + len + ' | ' + chars.length + '绉嶅瓧绗︾被鍨?</div>';
-}
-function copyPassword() {
-  const pw = document.getElementById('pw-display').textContent;
-  if (pw && pw !== '鐐瑰嚮鐢熸垚瀵嗙爜' && !pw.startsWith('璇?)) {
-    navigator.clipboard.writeText(pw).then(() => showToast('鉁?瀵嗙爜宸插鍒?));
-  } else {
-    showToast('鈿?璇峰厛鐢熸垚瀵嗙爜');
-  }
-}
-// ====== Image to Base64 Tool ======
-let imgFileData = null;
-function handleImageSelect(input) {
-  const file = input.files[0];
-  if (!file) return;
-  imgFileData = file;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    document.getElementById('img-preview').style.display = 'block';
-    document.getElementById('img-preview-el').src = e.target.result;
-    document.getElementById('img-info').textContent = file.name + ' (' + formatFileSize(file.size) + ')';
-    document.getElementById('img-convert-btn').disabled = false;
-  };
-  reader.readAsDataURL(file);
-}
-function handleImageDrop(e) {
-  e.preventDefault();
-  e.target.style.borderColor = 'var(--border)';
-  const file = e.dataTransfer.files[0];
-  if (file && file.type.startsWith('image/')) {
-    document.getElementById('img-file').files = e.dataTransfer.files;
-    handleImageSelect(document.getElementById('img-file'));
-  }
-}
-function formatFileSize(bytes) {
-  if (bytes < 1024) return bytes + ' B';
-  if (bytes < 1048576) return (bytes/1024).toFixed(1) + ' KB';
-  return (bytes/1048576).toFixed(1) + ' MB';
-}
-function convertImageToBase64() {
-  if (!imgFileData) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    document.getElementById('img-base64-result').value = e.target.result;
-    showToast('鉁?杞崲瀹屾垚');
-  };
-  reader.readAsDataURL(imgFileData);
-}
-function copyBase64Result() {
-  const val = document.getElementById('img-base64-result').value;
-  if (!val) { showToast('鈿?璇峰厛杞崲鍥剧墖'); return; }
-  navigator.clipboard.writeText(val).then(() => showToast('鉁?Base64 宸插鍒?));
-}
-// ====== Unit Converter Tool ======
-const unitData = {
-  length: {
-    name: '闀垮害', units: [
-      {name:'姣背 (mm)', factor:0.001},
-      {name:'鍘樼背 (cm)', factor:0.01},
-      {name:'绫?(m)', factor:1},
-      {name:'鍗冪背 (km)', factor:1000},
-      {name:'鑻卞 (in)', factor:0.0254},
-      {name:'鑻卞昂 (ft)', factor:0.3048},
-      {name:'鐮?(yd)', factor:0.9144},
-      {name:'鑻遍噷 (mi)', factor:1609.344}
-    ]
-  },
-  weight: {
-    name: '閲嶉噺', units: [
-      {name:'姣厠 (mg)', factor:0.000001},
-      {name:'鍏?(g)', factor:0.001},
-      {name:'鍗冨厠 (kg)', factor:1},
-      {name:'鍚?(t)', factor:1000},
-      {name:'鐩庡徃 (oz)', factor:0.0283495},
-      {name:'纾?(lb)', factor:0.453592}
-    ]
-  },
-  temp: {
-    name: '娓╁害', units: [
-      {name:'鎽勬皬搴?(掳C)'},
-      {name:'鍗庢皬搴?(掳F)'},
-      {name:'寮€灏旀枃 (K)'}
-    ]
-  },
-  area: {
-    name: '闈㈢Н', units: [
-      {name:'骞虫柟姣背 (mm虏)', factor:0.000001},
-      {name:'骞虫柟鍘樼背 (cm虏)', factor:0.0001},
-      {name:'骞虫柟绫?(m虏)', factor:1},
-      {name:'鍏》 (ha)', factor:10000},
-      {name:'骞虫柟鍏噷 (km虏)', factor:1000000},
-      {name:'骞虫柟鑻卞 (in虏)', factor:0.00064516},
-      {name:'骞虫柟鑻卞昂 (ft虏)', factor:0.092903},
-      {name:'浜?, factor:666.667}
-    ]
-  },
-  volume: {
-    name: '浣撶Н', units: [
-      {name:'姣崌 (mL)', factor:0.000001},
-      {name:'鍗?(L)', factor:0.001},
-      {name:'绔嬫柟绫?(m鲁)', factor:1},
-      {name:'缇庡埗鍔犱粦 (gal)', factor:0.00378541},
-      {name:'缇庡埗澶歌劚 (qt)', factor:0.000946353},
-      {name:'绔嬫柟鑻卞昂 (ft鲁)', factor:0.0283168}
-    ]
-  },
-  speed: {
-    name: '閫熷害', units: [
-      {name:'绫?绉?(m/s)', factor:1},
-      {name:'鍗冪背/鏃?(km/h)', factor:0.277778},
-      {name:'鑻遍噷/鏃?(mph)', factor:0.44704},
-      {name:'鑺?(kn)', factor:0.514444},
-      {name:'椹但 (M)', factor:340.3}
-    ]
-  }
-};
-let currentUnitCat = 'length';
-function switchUnitCat(cat, btn) {
-  currentUnitCat = cat;
-  document.querySelectorAll('.unit-cat').forEach(b => { b.classList.remove('btn-primary','active'); b.classList.add('btn-secondary'); });
-  btn.classList.remove('btn-secondary'); btn.classList.add('btn-primary','active');
-  const d = unitData[cat];
-  const fromSel = document.getElementById('unit-from');
-  const toSel = document.getElementById('unit-to');
-  fromSel.innerHTML = ''; toSel.innerHTML = '';
-  d.units.forEach((u, i) => {
-    fromSel.add(new Option(u.name, i));
-    toSel.add(new Option(u.name, i));
-  });
-  toSel.selectedIndex = Math.min(1, d.units.length - 1);
-  convertUnit();
-}
-function convertUnit() {
-  const val = parseFloat(document.getElementById('unit-value').value);
-  const from = parseInt(document.getElementById('unit-from').value);
-  const to = parseInt(document.getElementById('unit-to').value);
-  const d = unitData[currentUnitCat];
-  const resultEl = document.getElementById('unit-result');
-  if (isNaN(val)) { resultEl.textContent = '璇疯緭鍏ユ湁鏁堟暟鍊?; return; }
-  if (from === to) { resultEl.textContent = val + ' ' + d.units[from].name; return; }
-  let result;
-  if (currentUnitCat === 'temp') {
-    // Special temperature conversion
-    const cFrom = d.units[from].name;
-    const cTo = d.units[to].name;
-    let celsius;
-    if (cFrom.includes('掳C')) celsius = val;
-    else if (cFrom.includes('掳F')) celsius = (val - 32) * 5/9;
-    else celsius = val - 273.15;
-    if (cTo.includes('掳C')) result = celsius;
-    else if (cTo.includes('掳F')) result = celsius * 9/5 + 32;
-    else result = celsius + 273.15;
-  } else {
-    const baseVal = val * d.units[from].factor;
-    result = baseVal / d.units[to].factor;
-  }
-  resultEl.innerHTML = '<span style="color:var(--muted);">' + val + ' ' + d.units[from].name + ' = </span>'
-    + '<strong style="color:#4ade80;">' + parseFloat(result.toPrecision(12)) + '</strong> '
-    + '<span style="color:var(--muted);">' + d.units[to].name + '</span>';
-}
-// Init unit converter on page load
-window.addEventListener('DOMContentLoaded', function() {
-  switchUnitCat('length', document.querySelector('.unit-cat'));
-});
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},2000)}
+function copyText(id){var e=document.getElementById(id);if(!e||!e.value||!e.value.trim()){toast("⚠ 内容为空");return}navigator.clipboard.writeText(e.value).then(function(){toast("✅ 已复制")})}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function showStatus(id,m,t){var e=document.getElementById(id);if(e)e.innerHTML="<div class=info-bar "+t+">"+m+"</div>"}
+function renderTree(v,d){
+var sp="  ".repeat(d);
+if(v===null)return "<span style=color:#94a3b8>null</span>";
+if(typeof v==="boolean")return "<span style=color:#f472b6>"+v+"</span>";
+if(typeof v==="number")return "<span style=color:#facc15>"+v+"</span>";
+if(typeof v==="string")return "<span style=color:#4ade80>\""+esc(v)+"\"</span>";
+if(Array.isArray(v)){if(v.length===0)return "<span style=color:#94a3b8>[]</span>";var s="[";for(var i=0;i<v.length;i++){s+="\n"+"  ".repeat(d+1)+renderTree(v[i],d+1);if(i<v.length-1)s+=","}return s+"\n"+"  ".repeat(d)+"]"}
+var ks=Object.keys(v);if(ks.length===0)return "<span style=color:#94a3b8>{}</span>";
+var s="{";for(var i=0;i<ks.length;i++){s+="\n"+"  ".repeat(d+1)+"<span style=color:#93c5fd>\""+esc(ks[i])+"\"</span>: "+renderTree(v[ks[i]],d+1);if(i<ks.length-1)s+=","}return s+"\n"+"  ".repeat(d)+"}"}
+function formatJSON(){var e=document.getElementById("json-input");try{var o=JSON.parse(e.value);e.value=JSON.stringify(o,null,2);showStatus("json-status","✅ 有效 JSON，已格式化","success");document.getElementById("json-tree").innerHTML="<pre style=margin:0;white-space:pre>"+renderTree(o,0)+"</pre>"}catch(err){showStatus("json-status","❌ "+err.message,"error")}}
+function compressJSON(){var e=document.getElementById("json-input");try{var o=JSON.parse(e.value);e.value=JSON.stringify(o);showStatus("json-status","✅ 已压缩","success")}catch(err){showStatus("json-status","❌ "+err.message,"error")}}
+function validateJSON(){var e=document.getElementById("json-input");try{JSON.parse(e.value);showStatus("json-status","✅ JSON 有效","success")}catch(err){showStatus("json-status","❌ "+err.message,"error")}}
+function buildLCS(a,b){var m=a.length,n=b.length,dp=[],i,j;for(i=0;i<=m;i++){dp[i]=[];for(j=0;j<=n;j++)dp[i][j]=0}for(i=1;i<=m;i++)for(j=1;j<=n;j++)dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]+1:Math.max(dp[i-1][j],dp[i][j-1]);var r=[];i=m;j=n;while(i>0&&j>0){if(a[i-1]===b[j-1]){r.unshift(a[i-1]);i--;j--}else if(dp[i-1][j]>dp[i][j-1])i--;else j--}return r}
+function compareDiff(){var o=document.getElementById("diff-original").value,m=document.getElementById("diff-modified").value,r=document.getElementById("diff-result");if(!o&&!m){r.innerHTML="<span style=color:var(--muted)>请输入文本</span>";return}var ol=o.split("\n"),nl=m.split("\n"),lcs=buildLCS(ol,nl),h="",oi=0,ni=0,li=0;while(oi<ol.length||ni<nl.length){if(li<lcs.length&&oi<ol.length&&ol[oi]===lcs[li]){h+="<div class=diff-line>  "+esc(lcs[li])+"</div>";oi++;ni++;li++}else if(li<lcs.length&&ni<nl.length&&nl[ni]===lcs[li]){h+="<div class=\"diff-line diff-added\">+ "+esc(nl[ni])+"</div>";ni++}else if(oi<ol.length&&(li>=lcs.length||ol[oi]!==lcs[li])){h+="<div class=\"diff-line diff-removed\">- "+esc(ol[oi])+"</div>";oi++}else if(ni<nl.length){h+="<div class=\"diff-line diff-added\">+ "+esc(nl[ni])+"</div>";ni++}else break}r.innerHTML=h||"<span style=color:var(--muted)>完全相同</span>"}
+function clearDiff(){document.getElementById("diff-original").value="";document.getElementById("diff-modified").value="";document.getElementById("diff-result").innerHTML="<span style=color:var(--muted)>点击对比查看结果</span>"}
+function generateQR(){var t=document.getElementById("qr-text").value.trim(),s=parseInt(document.getElementById("qr-size").value)||256,c=document.getElementById("qrcode-canvas");c.width=s;c.height=s;if(!t){var ctx=c.getContext("2d");ctx.fillStyle="#f1f5f9";ctx.fillRect(0,0,s,s);return}try{QRCode.toCanvas(c,t,{width:s,margin:2,color:{dark:"#0f172a",light:"#ffffff"}})}catch(e){}}
+function downloadQR(){var c=document.getElementById("qrcode-canvas"),a=document.createElement("a");a.download="qrcode.png";a.href=c.toDataURL();a.click();toast("✅ 已下载")}
+function encodeBase64(){var e=document.getElementById("base64-input");try{e.value=btoa(unescape(encodeURIComponent(e.value)));toast("✅ 编码完成")}catch(x){toast("❌ 失败")}}
+function decodeBase64(){var e=document.getElementById("base64-input");try{e.value=decodeURIComponent(escape(atob(e.value.trim())));toast("✅ 解码完成")}catch(x){toast("❌ 格式无效")}}
+function updateTS(){var e=document.getElementById("current-ts");if(e)e.textContent=Math.floor(Date.now()/1000)}
+updateTS();setInterval(updateTS,1000)
+function convertTimestamp(){var v=document.getElementById("ts-input").value.trim(),r=document.getElementById("ts-result");if(!v){r.innerHTML="";return}if(/^\d{1,13}$/.test(v)){var ts=parseInt(v);if(ts>9999999999)ts=Math.floor(ts/1000);var d=new Date(ts*1000);r.innerHTML="<div class=\"info-bar success\">📅 "+d.toLocaleString("zh-CN")+"<br>🌐 UTC: "+d.toISOString().replace("T"," ").slice(0,19)+"</div>";return}var d=new Date(v);if(!isNaN(d.getTime())){r.innerHTML="<div class=\"info-bar success\">🔢 秒: "+Math.floor(d.getTime()/1000)+"<br>🔢 毫秒: "+d.getTime()+"</div>";return}r.innerHTML="<div class=\"info-bar error\">❌ 无法识别</div>"}
+function convertColor(){var v=document.getElementById("color-input").value.trim(),p=document.getElementById("color-preview"),r=document.getElementById("color-results"),red,green,blue,hex=v;if(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(v)){hex=v.length===4?"#"+v[1]+v[1]+v[2]+v[2]+v[3]+v[3]:v;red=parseInt(hex.slice(1,3),16);green=parseInt(hex.slice(3,5),16);blue=parseInt(hex.slice(5,7),16)}else{var m=v.match(/rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/);if(m){red=parseInt(m[1]);green=parseInt(m[2]);blue=parseInt(m[3]);hex="#"+[red,green,blue].map(function(x){return x.toString(16).padStart(2,"0")}).join("")}}if(red===undefined){r.innerHTML="<span style=color:var(--muted)>支持: #6366f1 或 rgb(99,102,241)</span>";return}p.style.background="rgb("+red+","+green+","+blue+")";var rf=red/255,gf=green/255,bf=blue/255,max=Math.max(rf,gf,bf),min=Math.min(rf,gf,bf),h=0,s=0,l=(max+min)/2;if(max!==min){var d2=max-min;s=l>0.5?d2/(2-max-min):d2/(max+min);h=max===rf?((gf-bf)/d2+(gf<bf?6:0))/6:max===gf?((bf-rf)/d2+2)/6:((rf-gf)/d2+4)/6}h=Math.round(h*360);s=Math.round(s*100);l=Math.round(l*100);r.innerHTML="<div style=font-family:monospace;font-size:.9rem;line-height:2><div><span style=color:var(--muted)>HEX: </span><strong>"+hex+"</strong></div><div><span style=color:var(--muted)>RGB: </span><strong>rgb("+red+", "+green+", "+blue+")</strong></div><div><span style=color:var(--muted)>HSL: </span><strong>hsl("+h+", "+s+"%, "+l+"%)</strong></div></div>"}
+function randomColor(){document.getElementById("color-input").value="#"+Math.floor(Math.random()*16777215).toString(16).padStart(6,"0");convertColor()}
+function encodeURL(){var e=document.getElementById("url-input");try{e.value=encodeURIComponent(e.value);toast("✅ 编码完成")}catch(x){toast("❌ 失败")}}
+function decodeURL(){var e=document.getElementById("url-input");try{e.value=decodeURIComponent(e.value.trim());toast("✅ 解码完成")}catch(x){toast("❌ 无效")}}
+function md5(s){function r(d,n){return(d<<n)|(d>>>32-n)}function qOp(a,b,c,d,x,s2,t){var v=r(a+(b&c|~b&d)+x+t,s2)+b;return v>>>0}var l=[0xd76aa478,0xe8c7b756,0x242070db,0xc1bdceee,0xf57c0faf,0x4787c62a,0xa8304613,0xfd469501,0x698098d8,0x8b44f7af,0xffff5bb1,0x895cd7be,0x6b901122,0xfd987193,0xa679438e,0x49b40821];var len=s.length;var str=s+String.fromCharCode(128);var pad=(len+8)%64<56?56-(len+8)%64:120-(len+8)%64;for(var i=0;i<pad;i++)str+=String.fromCharCode(0);var bl=len*8;for(i=0;i<8;i++){str+=String.fromCharCode(bl&255);bl>>=8}var a=1732584193,b=4023233417,c=2562383102,d=271733878;for(var bi=0;bi<str.length;bi+=64){var block=str.substring(bi,bi+64);var A=a,B=b,C=c,D=d;var w=[];for(var j=0;j<64;j+=4)w[j/4]=block.charCodeAt(j)|(block.charCodeAt(j+1)<<8)|(block.charCodeAt(j+2)<<16)|(block.charCodeAt(j+3)<<24);var s2=[7,12,17,22,7,12,17,22,7,12,17,22,7,12,17,22,5,9,14,20,5,9,14,20,5,9,14,20,5,9,14,20,4,11,16,23,4,11,16,23,4,11,16,23,4,11,16,23,6,10,15,21,6,10,15,21,6,10,15,21,6,10,15,21];var K=[0xd76aa478,0xe8c7b756,0x242070db,0xc1bdceee,0xf57c0faf,0x4787c62a,0xa8304613,0xfd469501,0x698098d8,0x8b44f7af,0xffff5bb1,0x895cd7be,0x6b901122,0xfd987193,0xa679438e,0x49b40821,0xf61e2562,0xc040b340,0x265e5a51,0xe9b6c7aa,0xd62f105d,0x2441453,0xd8a1e681,0xe7d3fbc8,0x21e1cde6,0xc33707d6,0xf4d50d87,0x455a14ed,0xa9e3e905,0xfcefa3f8,0x676f02d9,0x8d2a4c8a,0xfffa3942,0x8771f681,0x6d9d6122,0xfde5380c,0xa4beea44,0x4bdecfa9,0xf6bb4b60,0xbebfbc70,0x289b7ec6,0xeaa127fa,0xd4ef3085,0x4881d05,0xd9d4d039,0xe6db99e5,0x1fa27cf8,0xc4ac5665,0xf4292244,0x432aff97,0xab9423a7,0xfc93a039,0x655b59c3,0x8f0ccc92,0xffeff47d,0x85845dd1,0x6fa87e4f,0xfe2ce6e0,0xa3014314,0x4e0811a1,0xf7537e82,0xbd3af235,0x2ad7d2bb,0xeb86d391];for(j=0;j<64;j++){var f,g;if(j<16){f=(B&C)|(~B&D);g=j}else if(j<32){f=(B&D)|(C&~D);g=(5*j+1)%16}else if(j<48){f=B^C^D;g=(3*j+5)%16}else{f=C^(B|~D);g=(7*j)%16}var temp=D;D=C;C=B;B=r(B+r(A+f+K[j]+w[g],s2[j]),0)+A;A=temp}a=r(a+A,0);b=r(b+B,0);c=r(c+C,0);d=r(d+D,0)}function toHex(x){var hx=x.toString(16);return"0000000".substr(0,8-hx.length)+hx}return toHex(a)+toHex(b)+toHex(c)+toHex(d)}
+function computeHash(algo){var input=document.getElementById("hash-input").value,r=document.getElementById("hash-result");if(!input){r.innerHTML="<span style=color:var(--muted)>请输入文本</span>";return}if(algo==="MD5"){var hx=md5(input);r.innerHTML="<div class=\"info-bar success\"><strong>MD5:</strong> <code style=word-break:break-all>"+hx+"</code></div>";navigator.clipboard.writeText(hx).then(function(){toast("✅ MD5 已复制")});return}try{var map={"SHA-1":"SHA-1","SHA-256":"SHA-256","SHA-512":"SHA-512"};var data=new TextEncoder().encode(input);crypto.subtle.digest(map[algo],data).then(function(buf){var hx2=Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,"0")}).join("");r.innerHTML="<div class=\"info-bar success\"><strong>"+algo+":</strong> <code style=word-break:break-all>"+hx2+"</code></div>";navigator.clipboard.writeText(hx2).then(function(){toast("✅ "+algo+" 已复制")})}).catch(function(e){r.innerHTML="<div class=\"info-bar error\">❌ "+e.message+"</div>"})}catch(e){r.innerHTML="<div class=\"info-bar error\">❌ "+e.message+"</div>"}}
+function generateUUIDs(n){var e=document.getElementById("uuid-list"),h="";for(var i=0;i<n;i++){var u=crypto.randomUUID();h+="<div style=display:flex;align-items:center;gap:8px;padding:4px 0><code>"+u+"</code><button class=\"btn btn-sm btn-secondary\" onclick=navigator.clipboard.writeText(\""+u+"\");toast(\x27✅ 已复制\x27)>📋</button></div>"}e.innerHTML=h}
+function testRegex(){var p=document.getElementById("regex-pattern").value,f=document.getElementById("regex-flags").value,t=document.getElementById("regex-input").value,r=document.getElementById("regex-result");if(!p){r.innerHTML="";return}try{var re=new RegExp(p,f),matches=[],m;if(f.indexOf("g")>=0){while((m=re.exec(t))!==null){matches.push({idx:m.index,len:m[0].length});if(m.index===re.lastIndex)re.lastIndex++}if(matches.length>0){var h="",pos=0;for(var i=0;i<matches.length;i++){h+=esc(t.slice(pos,matches[i].idx));h+="<mark style=background:rgba(99,102,241,.4);border-radius:2px>"+esc(t.slice(matches[i].idx,matches[i].idx+matches[i].len))+"</mark>";pos=matches[i].idx+matches[i].len}h+=esc(t.slice(pos));r.innerHTML="<div class=\"info-bar success\">✅ 匹配 "+matches.length+" 处</div><div style=margin-top:8px;background:var(--bg);padding:12px;border-radius:8px;font-family:monospace;font-size:.9rem;white-space:pre-wrap;word-break:break-all>"+h+"</div>"}else{r.innerHTML="<div class=\"info-bar error\">❌ 没有匹配</div>"}}else{var m2=t.match(re);if(m2){r.innerHTML="<div class=\"info-bar success\">✅ 匹配成功: <code>"+esc(m2[0])+"</code></div>"+(m2.length>1?"<div style=margin-top:6px;color:var(--muted);font-size:.85rem>"+m2.slice(1).map(function(g,i){return"["+(i+1)+"] "+esc(g||"")}).join(", ")+"</div>":"")}else{r.innerHTML="<div class=\"info-bar error\">❌ 没有匹配</div>"}}}catch(e){r.innerHTML="<div class=\"info-bar error\">❌ 语法错误: "+e.message+"</div>"}}
+function generatePassword(){var len=parseInt(document.getElementById("pw-length").value);var up=document.getElementById("pw-upper").checked,lo=document.getElementById("pw-lower").checked,nu=document.getElementById("pw-number").checked,sy=document.getElementById("pw-symbol").checked;var ch=[];if(up)ch.push("ABCDEFGHIJKLMNOPQRSTUVWXYZ");if(lo)ch.push("abcdefghijklmnopqrstuvwxyz");if(nu)ch.push("0123456789");if(sy)ch.push("!@#$%^&*()_+-=[]{}|;:,.<>?");if(ch.length===0){document.getElementById("pw-display").textContent="请至少选择一种";return}var all=ch.join(""),arr=new Uint32Array(len);crypto.getRandomValues(arr);var pw="";for(var i=0;i<len;i++)pw+=all[arr[i]%all.length];document.getElementById("pw-display").textContent=pw;var score=0;if(len>=12)score++;if(len>=18)score++;if(up)score++;if(lo)score++;if(nu)score++;if(sy)score++;var lvls=["🔴 弱","🟡 一般","🟢 强","🟣 非常强"],idx=Math.min(3,Math.floor(score/2));document.getElementById("pw-strength").innerHTML="<div class=\"info-bar "+(idx>=2?"success":"error")+"\">强度: "+lvls[idx]+"</div>"}
+function copyPassword(){var pw=document.getElementById("pw-display").textContent;if(pw&&pw!=="点击生成"){navigator.clipboard.writeText(pw).then(function(){toast("✅ 密码已复制")})}else{toast("⚠ 请先生成")}}
+var _imgFile=null;
+function handleImageSelect(input){var f=input.files[0];if(!f)return;_imgFile=f;var r=new FileReader();r.onload=function(e){document.getElementById("img-preview").style.display="block";document.getElementById("img-preview-el").src=e.target.result;var s=f.size,u="B";if(s>1024){s/=1024;u="KB"}if(s>1024){s/=1024;u="MB"}document.getElementById("img-info").textContent=f.name+" ("+s.toFixed(1)+" "+u+")";document.getElementById("img-convert-btn").disabled=false};r.readAsDataURL(f)}
+function handleImageDrop(e){e.preventDefault();e.target.style.borderColor="var(--border)";var f=e.dataTransfer.files[0];if(f&&f.type.startsWith("image/")){document.getElementById("img-file").files=e.dataTransfer.files;handleImageSelect(document.getElementById("img-file"))}}
+function convertImage(){if(!_imgFile)return;var r=new FileReader();r.onload=function(e){document.getElementById("img-result").value=e.target.result;toast("✅ 转换完成")};r.readAsDataURL(_imgFile)}
+var unitData={length:{u:[{n:"毫米 (mm)",f:0.001},{n:"厘米 (cm)",f:0.01},{n:"米 (m)",f:1},{n:"千米 (km)",f:1000},{n:"英寸 (in)",f:0.0254},{n:"英尺 (ft)",f:0.3048},{n:"英里 (mi)",f:1609.344}]},weight:{u:[{n:"毫克 (mg)",f:1e-6},{n:"克 (g)",f:0.001},{n:"千克 (kg)",f:1},{n:"吨 (t)",f:1000},{n:"盎司 (oz)",f:0.0283495},{n:"磅 (lb)",f:0.453592}]},temp:{u:[{n:"摄氏度 (°C)"},{n:"华氏度 (°F)"},{n:"开尔文 (K)"}]},area:{u:[{n:"平方毫米 (mm²)",f:1e-6},{n:"平方米 (m²)",f:1},{n:"公顷 (ha)",f:10000},{n:"平方公里 (km²)",f:1e6},{n:"亩",f:666.667}]},volume:{u:[{n:"毫升 (mL)",f:1e-6},{n:"升 (L)",f:0.001},{n:"立方米 (m³)",f:1},{n:"加仑 (gal)",f:0.00378541}]},speed:{u:[{n:"米/秒 (m/s)",f:1},{n:"千米/时 (km/h)",f:0.277778},{n:"英里/时 (mph)",f:0.44704},{n:"节 (kn)",f:0.514444}]}};var curCat="length";
+function popUnits(){var d=unitData[curCat],fs=document.getElementById("unit-from"),ts=document.getElementById("unit-to");fs.innerHTML="";ts.innerHTML="";for(var i=0;i<d.u.length;i++){fs.add(new Option(d.u[i].n,i));ts.add(new Option(d.u[i].n,i))}ts.selectedIndex=Math.min(1,d.u.length-1)}
+function convertUnit(){var v=parseFloat(document.getElementById("unit-value").value),f=parseInt(document.getElementById("unit-from").value),t=parseInt(document.getElementById("unit-to").value),d=unitData[curCat],r=document.getElementById("unit-result");if(isNaN(v)){r.textContent="请输入数值";return}if(f===t){r.innerHTML=v+" <span style=color:var(--muted)>"+d.u[f].n+"</span>";return}var result;if(curCat==="temp"){var cf=d.u[f].n,ct=d.u[t].n,cel;if(cf.indexOf("°C")>=0)cel=v;else if(cf.indexOf("°F")>=0)cel=(v-32)*5/9;else cel=v-273.15;if(ct.indexOf("°C")>=0)result=cel;else if(ct.indexOf("°F")>=0)result=cel*9/5+32;else result=cel+273.15}else{result=v*d.u[f].f/d.u[t].f}r.innerHTML="<span style=color:var(--muted)>"+v+" "+d.u[f].n+" = </span><strong style=color:#4ade80>"+parseFloat(result.toPrecision(12))+"</strong> <span style=color:var(--muted)>"+d.u[t].n+"</span>"}
+(function(){var cs=document.querySelectorAll(".unit-cat");for(var i=0;i<cs.length;i++){cs[i].addEventListener("click",function(){curCat=this.getAttribute("data-cat");var all=document.querySelectorAll(".unit-cat");for(var j=0;j<all.length;j++){all[j].classList.remove("btn-primary");all[j].classList.add("btn-secondary")}this.classList.remove("btn-secondary");this.classList.add("btn-primary");popUnits();convertUnit()})}popUnits();convertUnit()})();
 </script>
 </body>
 </html>
