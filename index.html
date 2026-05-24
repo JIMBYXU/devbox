@@ -491,16 +491,16 @@ textarea { min-height: 180px; }
 <script>
 // ====== Tab Switching ======
 function switchTab(tool, btn) {
-  var tabs = document.querySelectorAll('.tab');
-  for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
-  var panels = document.querySelectorAll('.tool-panel');
-  for (var i = 0; i < panels.length; i++) panels[i].classList.remove('active');
-  btn.classList.add('active');
-  var panel = document.getElementById('panel-' + tool);
-  if (panel) panel.classList.add('active');
+  var tabs = document.querySelectorAll(".tab");
+  for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove("active");
+  var panels = document.querySelectorAll(".tool-panel");
+  for (var i = 0; i < panels.length; i++) panels[i].classList.remove("active");
+  btn.classList.add("active");
+  var panel = document.getElementById("panel-" + tool);
+  if (panel) panel.classList.add("active");
 }
 
-// ======// ====== Toast ======
+// ====== Toast ======
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
